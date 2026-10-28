@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderGalaxy();
   }
 
-  // --- EXISTING FUNCTIONALITIES ---
+  // --- INTERACTIVE FEATURES & SIMULATION ---
   const docText = document.getElementById("doc-text");
   const analyzeBtn = document.getElementById("analyze-btn");
   const resultContainer = document.getElementById("result-container");
