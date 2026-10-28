@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // DOM Elements
   const docText = document.getElementById("doc-text");
   const analyzeBtn = document.getElementById("analyze-btn");
   const resultContainer = document.getElementById("result-container");
@@ -34,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const openAuthBtn = document.getElementById("open-auth-btn");
   const closeAuthBtn = document.getElementById("close-auth-btn");
   const authModal = document.getElementById("auth-modal");
+  const modalCard = document.getElementById("modal-card");
   const tabLogin = document.getElementById("tab-login");
   const tabSignup = document.getElementById("tab-signup");
   const loginForm = document.getElementById("login-form");
@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const calcPredEmi = document.getElementById("calc-pred-emi");
   const calcExtraLoss = document.getElementById("calc-extra-loss");
 
-  // Multi-Language State
   let currentTranslations = {
     hinglish: "",
     english: "",
@@ -64,7 +63,6 @@ Clause 22: Mandatory credit-protection insurance of ₹4,200 annually is auto-re
 Clause 7: Late payment fee is strictly capped at 0.5% per month of overdue installment, compliant with fair-practice guidelines.
 Clause 11: All third-party insurance products are optional. No auto-enrollment or silent renewals apply.`;
 
-  // Sample Buttons
   btnRisky.addEventListener("click", () => {
     docText.value = riskySample;
     fileNameDisplay.innerText = "sample_predatory_loan.pdf";
@@ -101,7 +99,7 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
     }, 1100);
   });
 
-  // Analyzer Click Event
+  // Analyzer Processing
   analyzeBtn.addEventListener("click", () => {
     const text = docText.value.trim();
 
@@ -121,7 +119,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
 
       const lower = text.toLowerCase();
 
-      // Rule classification & highlighting
       if (lower.includes("sole discretion") || lower.includes("without prior written notice") || lower.includes("without written notice") || lower.includes("36%")) {
         riskScore += 35;
         flags.push("Unilateral Interest Adjustment: Lender reserves right to hike interest without advance borrower notice.");
@@ -155,7 +152,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
         formattedHtml = highlightPhrase(formattedHtml, "non-refundable");
       }
 
-      // Generate Plain Summaries
       if (flags.length === 0) {
         riskScore = 12;
         flags.push("No predatory clauses found. Document adheres to standard fair-lending practices.");
@@ -174,12 +170,10 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
         negotiationContent.innerText = "Officer Script: 'Sir, Clause 14 & 19 mention discretionary rate adjustments and daily compounding penalties. As per RBI Fair Practices, I request capping late fees on a monthly basis and tying floating rates to an external benchmark.'";
       }
 
-      // Display Results
       resultContainer.style.display = "block";
       scoreValue.innerText = riskScore;
       highlightedText.innerHTML = formattedHtml;
 
-      // Radial Gauge Animation (Circumference ~ 264)
       const circumference = 264;
       const offset = circumference - (riskScore / 100) * circumference;
       gaugeProgress.style.strokeDashoffset = offset;
@@ -201,14 +195,11 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
         scoreDesc.innerText = "Document adheres to standard transparent lending disclosures.";
       }
 
-      // Red Flags
       redFlagsList.innerHTML = flags.map(item => `<li>⚠️ ${item}</li>`).join("");
 
-      // Set Hinglish Default
       plainSummary.innerText = currentTranslations.hinglish;
       setActiveLang("hinglish");
 
-      // Checklist
       checklistBox.innerHTML = questions.map((q, idx) => `
         <label class="checklist-item">
           <input type="checkbox" id="check-${idx}">
@@ -233,7 +224,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
     return content.replace(regex, `<mark class="highlight-flag">$1</mark>`);
   }
 
-  // Language Switch
   function setActiveLang(lang) {
     langButtons.forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
@@ -248,7 +238,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
     });
   });
 
-  // Voice-First Speech
   listenBtn.addEventListener("click", () => {
     if (!('speechSynthesis' in window)) {
       alert("Voice speech synthesis is not supported on this browser.");
@@ -261,7 +250,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
     window.speechSynthesis.speak(utterance);
   });
 
-  // Negotiation Script Toggle
   negotiateBtn.addEventListener("click", () => {
     if (negotiationBox.style.display === "none") {
       negotiationBox.style.display = "block";
@@ -272,20 +260,38 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
     }
   });
 
-  // 3D Tilt Card Effect
-  document.querySelectorAll(".tilt-card").forEach(card => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
+  // 3D Tilt for Cards and Modal
+  function apply3DTilt(element, maxTilt = 12) {
+    element.addEventListener("mousemove", (e) => {
+      const rect = element.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      card.style.transform = `perspective(1000px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) translateY(-4px)`;
+      element.style.transform = `perspective(1000px) rotateX(${-y / maxTilt}deg) rotateY(${x / maxTilt}deg) translateY(-4px)`;
     });
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+    element.addEventListener("mouseleave", () => {
+      element.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+    });
+  }
+
+  document.querySelectorAll(".tilt-card").forEach(card => apply3DTilt(card, 15));
+  if (modalCard) apply3DTilt(modalCard, 20);
+
+  // 3D Tilt Touch for Nav Items
+  const navLinks = document.querySelectorAll(".navbar nav a:not(.nav-cta)");
+  navLinks.forEach((link) => {
+    link.addEventListener("mousemove", (e) => {
+      const rect = link.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      link.style.transform = `perspective(600px) rotateX(${-y / 3}deg) rotateY(${x / 3}deg) translateY(-4px) translateZ(14px)`;
+    });
+
+    link.addEventListener("mouseleave", () => {
+      link.style.transform = `perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px)`;
     });
   });
 
-  // EMI & Predatory Cost Calculator
+  // EMI Calculator
   function calculateLoanImpact() {
     const P = parseFloat(calcAmount.value) || 0;
     const rStandard = (parseFloat(calcRate.value) || 0) / 12 / 100;
@@ -294,7 +300,6 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
 
     if (P <= 0 || n <= 0) return;
 
-    // Standard EMI formula: P * r * (1+r)^n / ((1+r)^n - 1)
     const emiStd = (P * rStandard * Math.pow(1 + rStandard, n)) / (Math.pow(1 + rStandard, n) - 1);
     const rBumped = rStandard + bump;
     const emiBumped = (P * rBumped * Math.pow(1 + rBumped, n)) / (Math.pow(1 + rBumped, n) - 1);
@@ -339,14 +344,14 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
 
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    alert("Firebase Auth Simulation: Successfully logged in as Borrower!");
+    alert("Firebase Auth Simulation: Successfully logged in!");
     authModal.classList.remove("active");
     openAuthBtn.innerText = "Account: Active";
   });
 
   signupForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    alert("Firebase Auth Simulation: Account registered successfully!");
+    alert("Firebase Auth Simulation: XYZ account registered successfully!");
     authModal.classList.remove("active");
     openAuthBtn.innerText = "Account: Active";
   });
