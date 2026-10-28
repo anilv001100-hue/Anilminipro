@@ -1,4 +1,85 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- 3D GALAXY STARFIELD ANIMATION CANVAS ---
+  const canvas = document.getElementById("galaxy-canvas");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const STAR_COUNT = 450;
+    const stars = [];
+    const colors = ["#ffffff", "#67e8f9", "#38bdf8", "#818cf8", "#c084fc"];
+
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+    let targetX = mouseX;
+    let targetY = mouseY;
+
+    window.addEventListener("mousemove", (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: (Math.random() - 0.5) * width * 2,
+        y: (Math.random() - 0.5) * height * 2,
+        z: Math.random() * width,
+        size: Math.random() * 1.5 + 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 0.8 + 0.3
+      });
+    }
+
+    function renderGalaxy() {
+      ctx.clearRect(0, 0, width, height);
+
+      mouseX += (targetX - mouseX) * 0.05;
+      mouseY += (targetY - mouseY) * 0.05;
+
+      const offsetX = (mouseX - width / 2) * 0.08;
+      const offsetY = (mouseY - height / 2) * 0.08;
+
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
+        star.z -= star.speed;
+
+        if (star.z <= 0) {
+          star.z = width;
+          star.x = (Math.random() - 0.5) * width * 2;
+          star.y = (Math.random() - 0.5) * height * 2;
+        }
+
+        const k = 280 / star.z;
+        const px = (star.x + offsetX) * k + width / 2;
+        const py = (star.y + offsetY) * k + height / 2;
+
+        if (px >= 0 && px <= width && py >= 0 && py <= height) {
+          const depthAlpha = Math.min(1, Math.max(0.1, 1 - star.z / width));
+          const size = Math.max(0.5, star.size * k);
+
+          ctx.beginPath();
+          ctx.arc(px, py, size, 0, Math.PI * 2);
+          ctx.fillStyle = star.color;
+          ctx.globalAlpha = depthAlpha;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = star.color;
+          ctx.fill();
+        }
+      }
+
+      ctx.globalAlpha = 1.0;
+      requestAnimationFrame(renderGalaxy);
+    }
+    renderGalaxy();
+  }
+
+  // --- EXISTING FUNCTIONALITIES ---
   const docText = document.getElementById("doc-text");
   const analyzeBtn = document.getElementById("analyze-btn");
   const resultContainer = document.getElementById("result-container");
