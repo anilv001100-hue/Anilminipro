@@ -1,117 +1,353 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // DOM Elements
   const docText = document.getElementById("doc-text");
   const analyzeBtn = document.getElementById("analyze-btn");
   const resultContainer = document.getElementById("result-container");
-  
+
   const scoreValue = document.getElementById("score-value");
-  const scoreCircle = document.getElementById("score-circle");
+  const gaugeProgress = document.getElementById("gauge-progress");
   const scoreVerdict = document.getElementById("score-verdict");
-  
+  const scoreDesc = document.getElementById("score-desc");
+
+  const highlightedText = document.getElementById("highlighted-text");
   const redFlagsList = document.getElementById("red-flags-list");
   const plainSummary = document.getElementById("plain-summary");
-  const checklist = document.getElementById("checklist");
+  const checklistBox = document.getElementById("checklist-box");
 
   const btnRisky = document.getElementById("sample-risky");
   const btnSafe = document.getElementById("sample-safe");
+  const btnClear = document.getElementById("clear-btn");
 
-  // Sample texts matching case study scenarios
-  const riskySample = `Clause 14.2: The lender reserves the right to increase annual percentage rates (APR) up to 36% at sole discretion without written notice.
-Clause 19: Late fees include a flat penalty of ₹2,500 plus 2% compounded daily on overdue balance.
-Clause 22: This loan includes automatic renewal of optional credit insurance policies billed quarterly unless opted out via physical notice 45 days in advance.`;
+  const docFileInput = document.getElementById("doc-file");
+  const uploadTrigger = document.getElementById("upload-trigger");
+  const fileNameDisplay = document.getElementById("file-name");
+  const ocrLoader = document.getElementById("ocr-loader");
 
-  const safeSample = `Clause 4: Fixed interest rate of 10.5% per annum for the entire loan tenure. No unilateral rate revision is permissible.
-Clause 7: Late payment fee is capped at 0.5% per month of the overdue EMI.
-Clause 11: No optional insurance is bundled. No automatic renewal clauses apply.`;
+  const listenBtn = document.getElementById("listen-btn");
+  const langButtons = document.querySelectorAll(".lang-btn");
 
+  const negotiateBtn = document.getElementById("negotiate-btn");
+  const negotiationBox = document.getElementById("negotiation-box");
+  const negotiationContent = document.getElementById("negotiation-content");
+
+  // Auth Modal Elements
+  const openAuthBtn = document.getElementById("open-auth-btn");
+  const closeAuthBtn = document.getElementById("close-auth-btn");
+  const authModal = document.getElementById("auth-modal");
+  const tabLogin = document.getElementById("tab-login");
+  const tabSignup = document.getElementById("tab-signup");
+  const loginForm = document.getElementById("login-form");
+  const signupForm = document.getElementById("signup-form");
+
+  // Calculator Elements
+  const calcAmount = document.getElementById("calc-amount");
+  const calcRate = document.getElementById("calc-rate");
+  const calcTenure = document.getElementById("calc-tenure");
+  const calcBump = document.getElementById("calc-bump");
+  const calcBtn = document.getElementById("calc-btn");
+  const calcStdEmi = document.getElementById("calc-std-emi");
+  const calcPredEmi = document.getElementById("calc-pred-emi");
+  const calcExtraLoss = document.getElementById("calc-extra-loss");
+
+  // Multi-Language State
+  let currentTranslations = {
+    hinglish: "",
+    english: "",
+    hindi: ""
+  };
+
+  const riskySample = `Clause 14.2: The lender reserves the absolute right to unilaterally adjust annual percentage rates (APR) up to 36% per annum at its sole discretion without prior written notice to the borrower.
+Clause 19: Default late payment will incur an instant penalty of ₹2,500 along with 2.5% compounded daily on the total delinquent balance.
+Clause 22: Mandatory credit-protection insurance of ₹4,200 annually is auto-renewed unless opted out via physical notice delivered 45 days prior to anniversary.`;
+
+  const safeSample = `Clause 4: Fixed interest rate capped at 9.8% per annum for the entire agreed loan tenure. No unilateral rate revision is permissible without written borrower consent.
+Clause 7: Late payment fee is strictly capped at 0.5% per month of overdue installment, compliant with fair-practice guidelines.
+Clause 11: All third-party insurance products are optional. No auto-enrollment or silent renewals apply.`;
+
+  // Sample Buttons
   btnRisky.addEventListener("click", () => {
     docText.value = riskySample;
+    fileNameDisplay.innerText = "sample_predatory_loan.pdf";
   });
 
   btnSafe.addEventListener("click", () => {
     docText.value = safeSample;
+    fileNameDisplay.innerText = "sample_fair_terms.pdf";
   });
 
+  btnClear.addEventListener("click", () => {
+    docText.value = "";
+    fileNameDisplay.innerText = "";
+    resultContainer.style.display = "none";
+    negotiationBox.style.display = "none";
+    window.speechSynthesis.cancel();
+  });
+
+  // Simulated OCR Ingestion
+  uploadTrigger.addEventListener("click", () => docFileInput.click());
+
+  docFileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    fileNameDisplay.innerText = file.name;
+    ocrLoader.style.display = "flex";
+    analyzeBtn.disabled = true;
+
+    setTimeout(() => {
+      ocrLoader.style.display = "none";
+      analyzeBtn.disabled = false;
+      docText.value = `[OCR PARSED: ${file.name}]\nClause 9.1: Processing fee of ₹5,500 is non-refundable regardless of sanction status.\nClause 15: Lender holds sole discretion to hike interest rate without written notice upon benchmark shifts.\nClause 21: Late payment carries penalty compounded daily at 2%.`;
+    }, 1100);
+  });
+
+  // Analyzer Click Event
   analyzeBtn.addEventListener("click", () => {
     const text = docText.value.trim();
 
     if (!text) {
-      alert("Please paste text or select a sample first!");
+      alert("Please paste contract text or select a preset sample first!");
       return;
     }
 
     analyzeBtn.innerText = "Extracting & Analyzing with AI...";
     analyzeBtn.disabled = true;
 
-    // Simulate AI processing delay
     setTimeout(() => {
-      let riskScore = 20;
+      let riskScore = 15;
       let flags = [];
       let questions = [];
-      let summaryText = "";
+      let formattedHtml = text;
 
       const lower = text.toLowerCase();
 
-      // Simple keyword heuristic simulating AI analysis
-      if (lower.includes("sole discretion") || lower.includes("without written notice") || lower.includes("36%")) {
+      // Rule classification & highlighting
+      if (lower.includes("sole discretion") || lower.includes("without prior written notice") || lower.includes("without written notice") || lower.includes("36%")) {
         riskScore += 35;
-        flags.push("Unilateral interest rate bump clause detected (Lender can hike rates without prior notice).");
-        questions.push("Is there a legal cap on the maximum floating interest rate?");
+        flags.push("Unilateral Interest Adjustment: Lender reserves right to hike interest without advance borrower notice.");
+        questions.push("What is the legal maximum floating ceiling on this loan's interest rate?");
+        formattedHtml = highlightPhrase(formattedHtml, "sole discretion");
+        formattedHtml = highlightPhrase(formattedHtml, "without written notice");
+        formattedHtml = highlightPhrase(formattedHtml, "without prior written notice");
+        formattedHtml = highlightPhrase(formattedHtml, "36%");
       }
 
-      if (lower.includes("daily") || lower.includes("compounded") || lower.includes("flat penalty")) {
+      if (lower.includes("daily") || lower.includes("compounded daily") || lower.includes("flat penalty")) {
         riskScore += 25;
-        flags.push("Aggressive compounding late payment penalties identified.");
-        questions.push("Can the daily penalty clause be waived or capped according to RBI guidelines?");
+        flags.push("Aggressive Compounding Penalty: Fines accumulate daily, creating compounding debt traps.");
+        questions.push("Can default penalties be capped on a monthly basis in accordance with RBI fair practices?");
+        formattedHtml = highlightPhrase(formattedHtml, "compounded daily");
+        formattedHtml = highlightPhrase(formattedHtml, "flat penalty");
       }
 
-      if (lower.includes("automatic renewal") || lower.includes("opted out") || lower.includes("bundled")) {
+      if (lower.includes("auto-renew") || lower.includes("mandatory credit-protection") || lower.includes("physical notice")) {
         riskScore += 20;
-        flags.push("Silent auto-renewal trap detected for credit insurance.");
-        questions.push("Can I opt out of the insurance package immediately without penalties?");
+        flags.push("Silent Auto-Renewal Trap: Non-negotiated insurance policies renewed automatically.");
+        questions.push("Can I opt out of bundled credit insurance immediately without loan cancellation?");
+        formattedHtml = highlightPhrase(formattedHtml, "auto-renewed");
+        formattedHtml = highlightPhrase(formattedHtml, "mandatory credit-protection");
       }
 
+      if (lower.includes("non-refundable") || lower.includes("foreclosure charges")) {
+        riskScore += 15;
+        flags.push("Steep Pre-closure / Processing Fee: High upfront financial deduction regardless of sanction.");
+        questions.push("Is there a penalty-free prepayment or foreclosure window?");
+        formattedHtml = highlightPhrase(formattedHtml, "non-refundable");
+      }
+
+      // Generate Plain Summaries
       if (flags.length === 0) {
-        riskScore = 15;
-        flags.push("No severe predatory clauses found. Document adheres to standard fair practice.");
-        questions.push("What are the exact prepayment / foreclosure charges, if any?");
-        summaryText = "Yeh document fair aur transparent lag raha hai. Interest rate aur charges clearly stated hain.";
+        riskScore = 12;
+        flags.push("No predatory clauses found. Document adheres to standard fair-lending practices.");
+        questions.push("Confirm the final EMI schedule and formal amortization sheet before signing.");
+
+        currentTranslations.hinglish = "Yeh agreement safe aur transparent lag raha hai. Isme koi unannounced rate hike ya hidden insurance charges nahi mile.";
+        currentTranslations.english = "This agreement appears fair and transparent. No predatory rate hikes or deceptive clauses were identified.";
+        currentTranslations.hindi = "यह दस्तावेज़ सुरक्षित और पारदर्शी प्रतीत होता है। इसमें कोई अनुचित ब्याज वृद्धि या छिपा हुआ शुल्क नहीं पाया गया है।";
+
+        negotiationContent.innerText = "Officer Script: 'I have reviewed the agreement. The terms comply with standard practices. Kindly provide the finalized amortization schedule.'";
       } else {
-        summaryText = "Is agreement me hidden charges aur aggressive rate revision clauses hain jo aage chal kar debt trap ban sakte hain. Signed copy lene se pehle clarification zaroor lein.";
+        currentTranslations.hinglish = "Is agreement me hidden penalties aur discretionary interest hike jaise red flags hain. Sign karne se pehle checklist ke sawal loan officer se zaroor poochein.";
+        currentTranslations.english = "This agreement contains high-risk clauses including discretionary interest adjustments and daily penalties. Seek written clarification on flagged terms before signing.";
+        currentTranslations.hindi = "इस दस्तावेज़ में छिपे हुए शुल्क और एकतरफा ब्याज वृद्धि जैसे गंभीर जोखिम मौजूद हैं। हस्ताक्षर करने से पूर्व बैंक अधिकारी से पुष्टि करें।";
+
+        negotiationContent.innerText = "Officer Script: 'Sir, Clause 14 & 19 mention discretionary rate adjustments and daily compounding penalties. As per RBI Fair Practices, I request capping late fees on a monthly basis and tying floating rates to an external benchmark.'";
       }
 
-      // Display results
+      // Display Results
       resultContainer.style.display = "block";
       scoreValue.innerText = riskScore;
+      highlightedText.innerHTML = formattedHtml;
 
-      // Color coding score
+      // Radial Gauge Animation (Circumference ~ 264)
+      const circumference = 264;
+      const offset = circumference - (riskScore / 100) * circumference;
+      gaugeProgress.style.strokeDashoffset = offset;
+
       if (riskScore >= 60) {
-        scoreCircle.style.background = "#dc2626"; // High Risk Red
-        scoreVerdict.innerText = "High Risk Document (Predatory Terms Detected)";
+        gaugeProgress.style.stroke = "#ef4444";
+        scoreVerdict.innerText = "High Risk (Predatory Terms Detected)";
         scoreVerdict.style.color = "#dc2626";
+        scoreDesc.innerText = "Document contains arbitrary lender rights and predatory penalty structures.";
       } else if (riskScore >= 35) {
-        scoreCircle.style.background = "#d97706"; // Medium Risk Orange
-        scoreVerdict.innerText = "Moderate Risk (Verify Terms Carefully)";
+        gaugeProgress.style.stroke = "#f59e0b";
+        scoreVerdict.innerText = "Moderate Risk (Review Required)";
         scoreVerdict.style.color = "#d97706";
+        scoreDesc.innerText = "Some ambiguous clauses require explicit clarification before signing.";
       } else {
-        scoreCircle.style.background = "#16a34a"; // Safe Green
-        scoreVerdict.innerText = "Low Risk / Safe Document";
+        gaugeProgress.style.stroke = "#10b981";
+        scoreVerdict.innerText = "Low Risk / Standard Terms";
         scoreVerdict.style.color = "#16a34a";
+        scoreDesc.innerText = "Document adheres to standard transparent lending disclosures.";
       }
 
-      // Populate flags
-      redFlagsList.innerHTML = flags.map(item => `<li>${item}</li>`).join("");
+      // Red Flags
+      redFlagsList.innerHTML = flags.map(item => `<li>⚠️ ${item}</li>`).join("");
 
-      // Populate summary
-      plainSummary.innerText = summaryText;
+      // Set Hinglish Default
+      plainSummary.innerText = currentTranslations.hinglish;
+      setActiveLang("hinglish");
 
-      // Populate checklist
-      checklist.innerHTML = questions.map(q => `<li>Ask: "${q}"</li>`).join("");
+      // Checklist
+      checklistBox.innerHTML = questions.map((q, idx) => `
+        <label class="checklist-item">
+          <input type="checkbox" id="check-${idx}">
+          <span>Ask Officer: "${q}"</span>
+        </label>
+      `).join("");
+
+      document.querySelectorAll(".checklist-item input").forEach(box => {
+        box.addEventListener("change", (e) => {
+          e.target.parentElement.classList.toggle("checked", e.target.checked);
+        });
+      });
 
       analyzeBtn.innerText = "Analyze Document with AI";
       analyzeBtn.disabled = false;
-
-      // Scroll to result smoothly
-      resultContainer.scrollIntoView({ behavior: 'smooth' });
+      resultContainer.scrollIntoView({ behavior: "smooth" });
     }, 700);
+  });
+
+  function highlightPhrase(content, phrase) {
+    const regex = new RegExp(`(${phrase})`, "gi");
+    return content.replace(regex, `<mark class="highlight-flag">$1</mark>`);
+  }
+
+  // Language Switch
+  function setActiveLang(lang) {
+    langButtons.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
+    });
+  }
+
+  langButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const selected = btn.getAttribute("data-lang");
+      setActiveLang(selected);
+      plainSummary.innerText = currentTranslations[selected] || currentTranslations.hinglish;
+    });
+  });
+
+  // Voice-First Speech
+  listenBtn.addEventListener("click", () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Voice speech synthesis is not supported on this browser.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const textToRead = plainSummary.innerText;
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  });
+
+  // Negotiation Script Toggle
+  negotiateBtn.addEventListener("click", () => {
+    if (negotiationBox.style.display === "none") {
+      negotiationBox.style.display = "block";
+      negotiateBtn.innerText = "Hide Script";
+    } else {
+      negotiationBox.style.display = "none";
+      negotiateBtn.innerText = "Draft Discussion Script";
+    }
+  });
+
+  // 3D Tilt Card Effect
+  document.querySelectorAll(".tilt-card").forEach(card => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      card.style.transform = `perspective(1000px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) translateY(-4px)`;
+    });
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+    });
+  });
+
+  // EMI & Predatory Cost Calculator
+  function calculateLoanImpact() {
+    const P = parseFloat(calcAmount.value) || 0;
+    const rStandard = (parseFloat(calcRate.value) || 0) / 12 / 100;
+    const n = (parseFloat(calcTenure.value) || 0) * 12;
+    const bump = (parseFloat(calcBump.value) || 0) / 12 / 100;
+
+    if (P <= 0 || n <= 0) return;
+
+    // Standard EMI formula: P * r * (1+r)^n / ((1+r)^n - 1)
+    const emiStd = (P * rStandard * Math.pow(1 + rStandard, n)) / (Math.pow(1 + rStandard, n) - 1);
+    const rBumped = rStandard + bump;
+    const emiBumped = (P * rBumped * Math.pow(1 + rBumped, n)) / (Math.pow(1 + rBumped, n) - 1);
+
+    const totalStd = emiStd * n;
+    const totalBumped = emiBumped * n;
+    const extraLoss = totalBumped - totalStd;
+
+    calcStdEmi.innerText = `₹${Math.round(emiStd).toLocaleString("en-IN")} / mo`;
+    calcPredEmi.innerText = `₹${Math.round(emiBumped).toLocaleString("en-IN")} / mo`;
+    calcExtraLoss.innerText = `+₹${Math.round(extraLoss).toLocaleString("en-IN")} Total`;
+  }
+
+  calcBtn.addEventListener("click", calculateLoanImpact);
+
+  // Auth Modal Handler
+  openAuthBtn.addEventListener("click", () => {
+    authModal.classList.add("active");
+  });
+
+  closeAuthBtn.addEventListener("click", () => {
+    authModal.classList.remove("active");
+  });
+
+  authModal.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.remove("active");
+  });
+
+  tabLogin.addEventListener("click", () => {
+    tabLogin.classList.add("active");
+    tabSignup.classList.remove("active");
+    loginForm.style.display = "block";
+    signupForm.style.display = "none";
+  });
+
+  tabSignup.addEventListener("click", () => {
+    tabSignup.classList.add("active");
+    tabLogin.classList.remove("active");
+    loginForm.style.display = "none";
+    signupForm.style.display = "block";
+  });
+
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Firebase Auth Simulation: Successfully logged in as Borrower!");
+    authModal.classList.remove("active");
+    openAuthBtn.innerText = "Account: Active";
+  });
+
+  signupForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Firebase Auth Simulation: Account registered successfully!");
+    authModal.classList.remove("active");
+    openAuthBtn.innerText = "Account: Active";
   });
 });
