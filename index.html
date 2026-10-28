@@ -3,149 +3,411 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoanLens | AI-Driven Financial Document Clarity & Risk Analysis</title>
+  <title>LoanLens | AI Financial Copilot & Risk Analyzer</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
+  <!-- Background Animated 3D Orbs -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
   <!-- Navigation -->
   <header class="navbar">
-    <div class="logo">Loan<span>Lens</span></div>
+    <div class="logo">
+      <div class="logo-icon"></div>
+      Loan<span>Lens</span>
+    </div>
     <nav>
-      <a href="#about">About</a>
-      <a href="#workflow">Workflow</a>
+      <a href="#about">Problem</a>
+      <a href="#demo">AI Analyzer</a>
+      <a href="#calculator">Trap Calculator</a>
       <a href="#features">Features</a>
-      <a href="#demo" class="nav-cta">Try Demo</a>
+      <a href="#database">Database</a>
+      <button class="nav-auth-btn" id="open-auth-btn">Sign In / Join</button>
+      <a href="#demo" class="nav-cta">Analyze Doc</a>
     </nav>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <span class="badge">FinTech & AI Copilot</span>
-      <h1>Understand the Fine Print <span>Before You Sign</span></h1>
-      <p>
-        Crores of borrowers sign complex financial agreements without knowing hidden traps. 
-        LoanLens uses AI to convert complex legal jargon into simple regional language, 
-        highlights red flags, and calculates instant risk scores.
+      <div class="badge pulse-badge">
+        <span class="badge-dot"></span> Next-Gen AI FinTech Copilot
+      </div>
+      <h1 class="hero-title">
+        Decode Legal Jargon.<br />
+        <span>Expose Hidden Traps</span> Before You Sign.
+      </h1>
+      <p class="hero-desc">
+        Crores of Indian borrowers fall prey to deceptive clauses, unfair rate revisions, and silent renewals. LoanLens uses intelligent LLM parsing and OCR to protect your financial rights in everyday language.
       </p>
       <div class="hero-btns">
-        <a href="#demo" class="btn btn-primary">Scan Agreement Now</a>
-        <a href="#features" class="btn btn-secondary">Learn More</a>
+        <a href="#demo" class="btn btn-primary glow-btn">Launch AI Scanner ⚡</a>
+        <a href="#calculator" class="btn btn-glass">Hidden Cost Calculator</a>
       </div>
     </div>
-  </section>
 
-  <!-- Problem & Solution Overview -->
-  <section id="about" class="section">
-    <h2 class="section-title">The Problem We Are Solving</h2>
-    <div class="cards-grid">
-      <div class="card problem-card">
-        <h3>Predatory Lending</h3>
-        <p>Unfair clauses are purposely hidden behind dense legal language to exploit vulnerable borrowers.</p>
-      </div>
-      <div class="card problem-card">
-        <h3>Hidden Penalties</h3>
-        <p>Hefty processing fees and escalating interest clauses are buried deep inside the contract.</p>
-      </div>
-      <div class="card problem-card">
-        <h3>Auto-Renewal Traps</h3>
-        <p>Insurance policies and credit terms silently renew without the clear consent of consumers.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Project Demo / Analyzer -->
-  <section id="demo" class="section demo-section">
-    <h2 class="section-title">Live Document Risk Analyzer (Demo)</h2>
-    <p class="section-subtitle">Simulate how LoanLens extracts OCR text and analyzes risk.</p>
-
-    <div class="analyzer-box">
-      <!-- Input Side -->
-      <div class="analyzer-input">
-        <label for="doc-text">Paste Document Text or Choose a Sample:</label>
-        <div class="sample-buttons">
-          <button type="button" class="sample-btn" id="sample-risky">Risky Loan Sample</button>
-          <button type="button" class="sample-btn" id="sample-safe">Safe Loan Sample</button>
+    <!-- 3D Floating Mockup Graphic -->
+    <div class="hero-visual">
+      <div class="hero-3d-card tilt-card">
+        <div class="card-status-bar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="status-text">LoanLens AI Shield: Active</span>
         </div>
-        <textarea id="doc-text" rows="8" placeholder="Paste loan agreement clause here or select sample above..."></textarea>
-        <button id="analyze-btn" class="btn btn-primary full-width">Analyze Document with AI</button>
+        <div class="mockup-content">
+          <div class="badge-danger">⚠️ Clause 14.2 Flagged</div>
+          <div class="mockup-line strong">Lender reserves right to hike APR to 36%...</div>
+          <div class="mockup-line small">Unilateral change detected | High Predatory Risk</div>
+          <div class="mockup-meter-preview">
+            <div class="mock-meter-fill"></div>
+          </div>
+          <div class="mockup-stat">Risk Index: <strong>88/100 (Unsafe)</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Section with 3D Tilt Cards -->
+  <section id="about" class="section">
+    <div class="section-tag">Predatory Practices</div>
+    <h2 class="section-title">The Information Asymmetry Problem</h2>
+    <p class="section-subtitle">How unfair clauses exploit borrower illiteracy and dense legalese</p>
+
+    <div class="cards-grid">
+      <div class="card problem-card tilt-card">
+        <div class="card-icon danger-icon">⚡</div>
+        <h3>Predatory Lending</h3>
+        <p>Unilateral interest escalations and non-transparent benchmarks specifically engineered to trap borrowers in endless cycles.</p>
+      </div>
+      <div class="card problem-card tilt-card">
+        <div class="card-icon warning-icon">💸</div>
+        <h3>Hidden Surcharges</h3>
+        <p>Pre-closure penalties, compounding daily default fees, and hefty administrative add-ons buried in schedule footers.</p>
+      </div>
+      <div class="card problem-card tilt-card">
+        <div class="card-icon alert-icon">🔄</div>
+        <h3>Silent Auto-Renewals</h3>
+        <p>Opt-in credit insurances and bundled protection packages that renew annually without explicit borrower signature.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive AI Analyzer Section -->
+  <section id="demo" class="section demo-section">
+    <div class="section-tag">Interactive Simulation</div>
+    <h2 class="section-title">Live Document Risk Analyzer</h2>
+    <p class="section-subtitle">Simulate OCR document parsing, NLP clause classification, and risk scoring</p>
+
+    <div class="analyzer-box glass-panel">
+      <!-- Input Panel -->
+      <div class="analyzer-input">
+        <div class="input-header">
+          <label><strong>Document Ingestion:</strong></label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="doc-file" accept=".pdf,image/*" style="display: none;" />
+            <button type="button" class="btn-file" id="upload-trigger">📁 Upload PDF / Image (Simulate OCR)</button>
+            <span id="file-name" class="file-name-display"></span>
+          </div>
+        </div>
+
+        <div class="sample-row">
+          <span>Test Samples:</span>
+          <button type="button" class="sample-btn" id="sample-risky">High-Risk Predatory Loan</button>
+          <button type="button" class="sample-btn" id="sample-safe">RBI-Compliant Fair Loan</button>
+          <button type="button" class="sample-btn clear-btn" id="clear-btn">Clear</button>
+        </div>
+
+        <div id="ocr-loader" class="ocr-loader" style="display: none;">
+          <div class="spinner"></div>
+          <span>Cloud Vision OCR: Scanning document segments and extracting clauses...</span>
+        </div>
+
+        <textarea id="doc-text" rows="7" placeholder="Paste loan agreement clauses, promissory notes, or credit terms here..."></textarea>
+        
+        <button id="analyze-btn" class="btn btn-primary full-width glow-btn">Analyze Document with AI</button>
       </div>
 
-      <!-- Result Side -->
+      <!-- Result Panel -->
       <div class="analyzer-result" id="result-container" style="display: none;">
-        <h3>AI Analysis Output</h3>
-        
+        <div class="result-header">
+          <h3>Analysis Summary</h3>
+          <button id="listen-btn" class="btn-audio">🔊 Voice-First Mode (Read Aloud)</button>
+        </div>
+
+        <!-- 3D Animated Risk Score Radial Gauge -->
         <div class="score-card">
-          <span>Calculated Risk Score:</span>
-          <div class="score-meter">
-            <div class="score-circle" id="score-circle">
+          <div class="gauge-container">
+            <svg class="radial-gauge" viewBox="0 0 100 100">
+              <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+              <circle class="gauge-progress" id="gauge-progress" cx="50" cy="50" r="42"></circle>
+            </svg>
+            <div class="gauge-label">
               <span id="score-value">0</span>
               <small>/100</small>
             </div>
-            <div class="score-verdict" id="score-verdict">Evaluating...</div>
+          </div>
+          <div class="score-details">
+            <div class="score-verdict" id="score-verdict">Evaluating Document...</div>
+            <p id="score-desc" class="score-desc"></p>
           </div>
         </div>
 
         <div class="analysis-details">
-          <h4>Detected Red Flags:</h4>
+          <h4>Clause-Level Visual Highlighter:</h4>
+          <div id="highlighted-text" class="highlighted-box"></div>
+
+          <h4>Identified Red Flags & Unfair Clauses:</h4>
           <ul id="red-flags-list" class="flags-list"></ul>
 
-          <h4>Simplified Plain-Language Explanation:</h4>
-          <p id="plain-summary" class="plain-summary"></p>
+          <!-- Plain-Language Summary with Multilingual Switcher -->
+          <div class="summary-section">
+            <div class="summary-toggle-header">
+              <h4>Plain-Language Breakdown:</h4>
+              <div class="lang-toggles">
+                <button class="lang-btn active" data-lang="hinglish">Hinglish</button>
+                <button class="lang-btn" data-lang="english">English</button>
+                <button class="lang-btn" data-lang="hindi">Hindi</button>
+              </div>
+            </div>
+            <p id="plain-summary" class="plain-summary"></p>
+          </div>
 
-          <h4>"Ask-Before-Signing" Checklist:</h4>
-          <ul id="checklist" class="checklist"></ul>
+          <!-- Ask-Before-Signing Checklist -->
+          <h4>"Ask-Before-Signing" Interactive Checklist:</h4>
+          <p class="checklist-tip">Check off items once verified with your lender or branch manager:</p>
+          <div id="checklist-box" class="checklist-container"></div>
+
+          <!-- Negotiation Script Generator -->
+          <div class="negotiation-section">
+            <div class="negotiation-header">
+              <h4>AI Negotiation Script:</h4>
+              <button id="negotiate-btn" class="btn-secondary-action">Draft Discussion Script</button>
+            </div>
+            <div id="negotiation-box" class="negotiation-box" style="display: none;">
+              <p id="negotiation-content"></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section id="features" class="section">
-    <h2 class="section-title">Key Core Features</h2>
-    <div class="cards-grid">
-      <div class="card feature-card">
-        <div class="feature-icon">🌐</div>
-        <h3>Simple Language Translator</h3>
-        <p>Converts dense legal jargon into accessible everyday English or regional languages.</p>
+  <!-- New Interactive Feature: Hidden Cost & Penalty Calculator -->
+  <section id="calculator" class="section bg-alt">
+    <div class="section-tag">Financial Awareness</div>
+    <h2 class="section-title">Predatory Cost Impact Calculator</h2>
+    <p class="section-subtitle">See how a small hidden clause or sudden rate bump multiplies your total repayment</p>
+
+    <div class="calc-box glass-panel">
+      <div class="calc-inputs">
+        <div class="input-field">
+          <label>Loan Amount (₹):</label>
+          <input type="number" id="calc-amount" value="500000" step="50000">
+        </div>
+        <div class="input-field">
+          <label>Agreed Interest Rate (% p.a.):</label>
+          <input type="number" id="calc-rate" value="11" step="0.5">
+        </div>
+        <div class="input-field">
+          <label>Tenure (Years):</label>
+          <input type="number" id="calc-tenure" value="5" min="1" max="30">
+        </div>
+        <div class="input-field">
+          <label>Hidden Clause Bump (% hike):</label>
+          <input type="number" id="calc-bump" value="4" step="0.5">
+        </div>
       </div>
-      <div class="card feature-card">
-        <div class="feature-icon">🚩</div>
-        <h3>Red Flag Highlighter</h3>
-        <p>Immediately highlights hidden fees, interest spikes, and severe penalty clauses.</p>
-      </div>
-      <div class="card feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Intelligent Risk Score</h3>
-        <p>Generates a dynamic 0-100 metric showing the fairness and safety of the document.</p>
-      </div>
-      <div class="card feature-card">
-        <div class="feature-icon">📋</div>
-        <h3>Pre-Signing Checklist</h3>
-        <p>Prepares customized questions you should ask the loan officer before signing.</p>
+      <button id="calc-btn" class="btn btn-primary">Calculate Financial Impact</button>
+
+      <div class="calc-results" id="calc-results">
+        <div class="calc-stat-card">
+          <span>Standard Repayment</span>
+          <h4 id="calc-std-emi">₹10,871 / mo</h4>
+        </div>
+        <div class="calc-stat-card danger">
+          <span>With Predatory Rate Bump</span>
+          <h4 id="calc-pred-emi">₹11,895 / mo</h4>
+        </div>
+        <div class="calc-stat-card highlight">
+          <span>Extra Out-of-Pocket Drain</span>
+          <h4 id="calc-extra-loss">+₹61,440 Total</h4>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Tech Stack & Workflow -->
-  <section id="workflow" class="section bg-alt">
-    <h2 class="section-title">System Architecture & Tech Stack</h2>
-    <div class="tech-grid">
-      <div class="tech-item"><strong>Frontend:</strong> FlutterFlow / Mobile Web</div>
-      <div class="tech-item"><strong>Backend:</strong> Firebase (Firestore, Cloud Storage)</div>
-      <div class="tech-item"><strong>AI Engine:</strong> Claude / GPT Large Language Models</div>
-      <div class="tech-item"><strong>OCR Engine:</strong> Google Cloud Vision / ML Kit</div>
+  <!-- Community Red-Flag Database -->
+  <section id="database" class="section">
+    <div class="section-tag">Regulatory Alignment</div>
+    <h2 class="section-title">Community Red-Flag Database</h2>
+    <p class="section-subtitle">Real predatory patterns flagged from borrower complaints and regulatory advisories</p>
+    
+    <div class="table-container glass-panel">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Clause Pattern</th>
+            <th>Predatory Scheme Description</th>
+            <th>Typical Financial Trap</th>
+            <th>Consumer Protection Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Discretionary APR Hikes</strong></td>
+            <td>Lender reserves unilateral authority to raise rate without notice</td>
+            <td>+4% to +16% after first 6 months</td>
+            <td><span class="pill pill-danger">High Risk</span> Flagged by RBI</td>
+          </tr>
+          <tr>
+            <td><strong>Daily Compounded Fine</strong></td>
+            <td>Overdue penalties compounded daily instead of flat monthly charges</td>
+            <td>Up to 36% APR equivalent</td>
+            <td><span class="pill pill-danger">Unfair</span> Court Precedents</td>
+          </tr>
+          <tr>
+            <td><strong>Bundled Credit Shield</strong></td>
+            <td>Mandatory bundled insurance deducted directly from disbursement</td>
+            <td>₹4,000 – ₹10,000 lost upfront</td>
+            <td><span class="pill pill-warning">Disguised Fee</span> Must be Opt-in</td>
+          </tr>
+          <tr>
+            <td><strong>Prepayment Lock-In</strong></td>
+            <td>Extravagant foreclosure penalties if borrower switches to better loan</td>
+            <td>3% to 5% on remaining principal</td>
+            <td><span class="pill pill-warning">Anti-Consumer</span> Check Loan Type</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
+
+  <!-- Core Features Section -->
+  <section id="features" class="section bg-alt">
+    <div class="section-tag">Empowerment</div>
+    <h2 class="section-title">LoanLens Core Features</h2>
+    <div class="cards-grid">
+      <div class="card feature-card tilt-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Simple Language Translator</h3>
+        <p>Translates complex legal jargon into accessible regional languages (Hindi, Hinglish, English).</p>
+      </div>
+      <div class="card feature-card tilt-card">
+        <div class="feature-icon">🚩</div>
+        <h3>Red Flag Highlighter</h3>
+        <p>Visually highlights dangerous sentences, interest surges, and unannounced renewal clauses.</p>
+      </div>
+      <div class="card feature-card tilt-card">
+        <div class="feature-icon">📊</div>
+        <h3>Intelligent Risk Score</h3>
+        <p>Quantifiable 0–100 fairness score enabling instant evaluation of any contract.</p>
+      </div>
+      <div class="card feature-card tilt-card">
+        <div class="feature-icon">🎙️</div>
+        <h3>Voice-First Accessibility</h3>
+        <p>Reads findings aloud via browser speech synthesis for rural and low-literacy borrowers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- System Architecture Section -->
+  <section id="workflow" class="section">
+    <div class="section-tag">Engineering Stack</div>
+    <h2 class="section-title">System Architecture</h2>
+    <div class="tech-grid">
+      <div class="tech-item tilt-card">
+        <div class="tech-badge">Frontend</div>
+        <strong>FlutterFlow & Modern Web</strong>
+        <p>Responsive, reactive interface with accessible multi-lingual components.</p>
+      </div>
+      <div class="tech-item tilt-card">
+        <div class="tech-badge">Backend</div>
+        <strong>Firebase Cloud Services</strong>
+        <p>Firestore security rules, authentication, and secure document storage.</p>
+      </div>
+      <div class="tech-item tilt-card">
+        <div class="tech-badge">AI Core</div>
+        <strong>Claude & GPT LLM APIs</strong>
+        <p>Clause breakdown, summarization, and risk scoring pipelines.</p>
+      </div>
+      <div class="tech-item tilt-card">
+        <div class="tech-badge">Vision</div>
+        <strong>Google ML Kit & Cloud OCR</strong>
+        <p>High-accuracy text extraction from physical paper contracts and PDF files.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Authentication Modal (Login / Signup) -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <button class="modal-close" id="close-auth-btn">&times;</button>
+      
+      <div class="modal-tabs">
+        <button class="tab-btn active" id="tab-login">Login</button>
+        <button class="tab-btn" id="tab-signup">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form">
+        <h3 class="auth-title">Welcome Back to LoanLens</h3>
+        <p class="auth-subtitle">Access your stored document scans & risk analyses</p>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="borrower@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary full-width glow-btn">Log In</button>
+        <p class="auth-footer-text">Powered by Firebase Auth Simulation</p>
+      </form>
+
+      <!-- Signup Form -->
+      <form class="auth-form" id="signup-form" style="display: none;">
+        <h3 class="auth-title">Create Borrower Account</h3>
+        <p class="auth-subtitle">Protect your loan agreements with AI clarity</p>
+        
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Anil Vishwakarma" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="anil@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Create Password</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary full-width glow-btn">Create Free Account</button>
+        <p class="auth-footer-text">Protected by End-to-End Encryption</p>
+      </form>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
-    <p><strong>LoanLens</strong> &copy; 2026. Submitted by Anil Vishwakarma (TYCS-B).</p>
-    <p>Domain: FinTech & Artificial Intelligence | Target: Financial Inclusion & Literacy</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Loan<span>Lens</span></div>
+        <p>AI-Driven Financial Document Clarity and Risk Analysis.</p>
+      </div>
+      <div class="footer-meta">
+        <p><strong>Lead Author:</strong> Anil Vishwakarma | Class: TYCS-B</p>
+        <p><strong>Domain:</strong> FinTech & Artificial Intelligence | Target: Digital Inclusion</p>
+        <p>&copy; 2026 LoanLens. All Academic Rights Reserved.</p>
+      </div>
+    </div>
   </footer>
 
   <script src="script.js"></script>
