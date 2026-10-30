@@ -355,7 +355,7 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
   }
 
   document.querySelectorAll(".tilt-card").forEach(card => apply3DTilt(card, 15));
-  if (modalCard) apply3DTilt(modalCard, 20);
+  // Yahan se modal ka tilt hata diya gaya hai taaki wo stable rahe
 
   // 3D Tilt Touch for Nav Items
   const navLinks = document.querySelectorAll(".navbar nav a:not(.nav-cta)");
