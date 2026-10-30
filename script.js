@@ -432,7 +432,7 @@ Clause 11: All third-party insurance products are optional. No auto-enrollment o
 
   signupForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    alert("Firebase Auth Simulation: XYZ account registered successfully!");
+    alert("Firebase Auth Simulation: ANIL VISHWAKARMA account registered successfully!");
     authModal.classList.remove("active");
     openAuthBtn.innerText = "Account: Active";
   });
